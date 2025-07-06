@@ -1,0 +1,48 @@
+2025/07/06 10:49:32 ✅ Connected to Envio PostgreSQL database
+2025/07/06 10:49:32 ✅ Database connection successful - PostgreSQL version: PostgreSQL 16.9 (Debian 16.9-1.pgdg120+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
+2025/07/06 10:49:32 📋 Connected to database: envio-dev
+2025/07/06 10:49:32 ✅ Database test successful - found 15 NFTs
+2025/07/06 10:49:32 🔧 Creating indexes on Envio tables...
+2025/07/06 10:49:32 ✅ Database indexes created
+[GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
+
+[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
+ - using env:	export GIN_MODE=release
+ - using code:	gin.SetMode(gin.ReleaseMode)
+
+2025/07/06 10:49:32 🔌 WebSocket manager started
+[GIN-debug] GET    /health                   --> main.main.func1 (4 handlers)
+[GIN-debug] GET    /stats                    --> nadmon-backend/internal/handlers.(*NadmonHandler).GetGameStats-fm (4 handlers)
+[GIN-debug] GET    /api/players/:address/nadmons --> nadmon-backend/internal/handlers.(*NadmonHandler).GetInventory-fm (4 handlers)
+[GIN-debug] GET    /api/players/:address/profile --> nadmon-backend/internal/handlers.(*NadmonHandler).GetPlayerProfile-fm (4 handlers)
+[GIN-debug] GET    /api/players/:address/packs --> nadmon-backend/internal/handlers.(*NadmonHandler).GetPlayerPacks-fm (4 handlers)
+[GIN-debug] GET    /api/players/:address/stats --> nadmon-backend/internal/handlers.(*NadmonHandler).GetStats-fm (4 handlers)
+[GIN-debug] GET    /api/players/:address/search --> nadmon-backend/internal/handlers.(*NadmonHandler).SearchNFTs-fm (4 handlers)
+[GIN-debug] GET    /api/nfts/:tokenId        --> nadmon-backend/internal/handlers.(*NadmonHandler).GetNFT-fm (4 handlers)
+[GIN-debug] GET    /api/nfts/:tokenId/history --> nadmon-backend/internal/handlers.(*NadmonHandler).GetNFT-fm (4 handlers)
+[GIN-debug] GET    /api/nfts                 --> nadmon-backend/internal/handlers.(*NadmonHandler).GetNFTsByIDs-fm (4 handlers)
+[GIN-debug] GET    /api/packs/:packId        --> nadmon-backend/internal/handlers.(*NadmonHandler).GetPackDetails-fm (4 handlers)
+[GIN-debug] GET    /api/packs/recent         --> nadmon-backend/internal/handlers.(*NadmonHandler).GetRecentPacks-fm (4 handlers)
+[GIN-debug] GET    /api/leaderboard/collectors --> nadmon-backend/internal/handlers.(*NadmonHandler).GetLeaderboard-fm (4 handlers)
+[GIN-debug] GET    /api/stats/game           --> nadmon-backend/internal/handlers.(*NadmonHandler).GetGameStats-fm (4 handlers)
+[GIN-debug] GET    /api/inventory/:address   --> nadmon-backend/internal/handlers.(*NadmonHandler).GetInventory-fm (4 handlers)
+[GIN-debug] GET    /api/inventory/:address/search --> nadmon-backend/internal/handlers.(*NadmonHandler).SearchNFTs-fm (4 handlers)
+[GIN-debug] GET    /api/nft/:tokenId         --> nadmon-backend/internal/handlers.(*NadmonHandler).GetNFT-fm (4 handlers)
+[GIN-debug] GET    /api/stats/:address       --> nadmon-backend/internal/handlers.(*NadmonHandler).GetStats-fm (4 handlers)
+[GIN-debug] GET    /api/ws/:address          --> nadmon-backend/internal/handlers.(*WebSocketHandler).HandleConnection-fm (4 handlers)
+2025/07/06 10:49:32 🚀 Nadmon Backend started on port 8081
+2025/07/06 10:49:32 📊 Health check: http://localhost:8081/health
+2025/07/06 10:49:32 🔌 WebSocket: ws://localhost:8081/api/ws/{address}
+2025/07/06 10:49:32 📋 API Documentation:
+2025/07/06 10:49:32    GET /api/players/{address}/nadmons    - Get player's NFTs
+2025/07/06 10:49:32    GET /api/players/{address}/profile    - Get player profile
+2025/07/06 10:49:32    GET /api/players/{address}/packs      - Get player's pack history
+2025/07/06 10:49:32    GET /api/players/{address}/stats      - Get player statistics
+2025/07/06 10:49:32    GET /api/nfts/{tokenId}               - Get NFT details and history
+2025/07/06 10:49:32    GET /api/packs/{packId}               - Get pack details with NFTs
+2025/07/06 10:49:32    GET /api/nfts?ids=1,2,3               - Get multiple NFTs by IDs
+2025/07/06 10:49:32    GET /api/packs/recent                 - Get recent pack purchases
+2025/07/06 10:49:32    GET /api/leaderboard/collectors       - Get top collectors
+2025/07/06 10:49:32    GET /api/stats/game                   - Get game statistics
+2025/07/06 10:49:32 Failed to start server:listen tcp :8081: bind: address already in use
+exit status 1
