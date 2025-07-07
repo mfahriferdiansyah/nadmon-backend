@@ -1,16 +1,15 @@
-2025/07/06 10:49:32 ✅ Connected to Envio PostgreSQL database
-2025/07/06 10:49:32 ✅ Database connection successful - PostgreSQL version: PostgreSQL 16.9 (Debian 16.9-1.pgdg120+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
-2025/07/06 10:49:32 📋 Connected to database: envio-dev
-2025/07/06 10:49:32 ✅ Database test successful - found 15 NFTs
-2025/07/06 10:49:32 🔧 Creating indexes on Envio tables...
-2025/07/06 10:49:32 ✅ Database indexes created
+2025/07/06 15:50:43 ✅ Connected to Envio PostgreSQL database
+2025/07/06 15:50:43 ✅ Database connection successful - PostgreSQL version: PostgreSQL 16.9 (Debian 16.9-1.pgdg120+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
+2025/07/06 15:50:43 📋 Connected to database: envio-dev
+2025/07/06 15:50:43 ✅ Database test successful - found 115 NFTs
+2025/07/06 15:50:43 🔧 Creating indexes on Envio tables...
+2025/07/06 15:50:43 ✅ Database indexes created
 [GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
 
 [GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
  - using env:	export GIN_MODE=release
  - using code:	gin.SetMode(gin.ReleaseMode)
 
-2025/07/06 10:49:32 🔌 WebSocket manager started
 [GIN-debug] GET    /health                   --> main.main.func1 (4 handlers)
 [GIN-debug] GET    /stats                    --> nadmon-backend/internal/handlers.(*NadmonHandler).GetGameStats-fm (4 handlers)
 [GIN-debug] GET    /api/players/:address/nadmons --> nadmon-backend/internal/handlers.(*NadmonHandler).GetInventory-fm (4 handlers)
@@ -18,6 +17,7 @@
 [GIN-debug] GET    /api/players/:address/packs --> nadmon-backend/internal/handlers.(*NadmonHandler).GetPlayerPacks-fm (4 handlers)
 [GIN-debug] GET    /api/players/:address/stats --> nadmon-backend/internal/handlers.(*NadmonHandler).GetStats-fm (4 handlers)
 [GIN-debug] GET    /api/players/:address/search --> nadmon-backend/internal/handlers.(*NadmonHandler).SearchNFTs-fm (4 handlers)
+2025/07/06 15:50:43 🔌 WebSocket manager started
 [GIN-debug] GET    /api/nfts/:tokenId        --> nadmon-backend/internal/handlers.(*NadmonHandler).GetNFT-fm (4 handlers)
 [GIN-debug] GET    /api/nfts/:tokenId/history --> nadmon-backend/internal/handlers.(*NadmonHandler).GetNFT-fm (4 handlers)
 [GIN-debug] GET    /api/nfts                 --> nadmon-backend/internal/handlers.(*NadmonHandler).GetNFTsByIDs-fm (4 handlers)
@@ -30,19 +30,200 @@
 [GIN-debug] GET    /api/nft/:tokenId         --> nadmon-backend/internal/handlers.(*NadmonHandler).GetNFT-fm (4 handlers)
 [GIN-debug] GET    /api/stats/:address       --> nadmon-backend/internal/handlers.(*NadmonHandler).GetStats-fm (4 handlers)
 [GIN-debug] GET    /api/ws/:address          --> nadmon-backend/internal/handlers.(*WebSocketHandler).HandleConnection-fm (4 handlers)
-2025/07/06 10:49:32 🚀 Nadmon Backend started on port 8081
-2025/07/06 10:49:32 📊 Health check: http://localhost:8081/health
-2025/07/06 10:49:32 🔌 WebSocket: ws://localhost:8081/api/ws/{address}
-2025/07/06 10:49:32 📋 API Documentation:
-2025/07/06 10:49:32    GET /api/players/{address}/nadmons    - Get player's NFTs
-2025/07/06 10:49:32    GET /api/players/{address}/profile    - Get player profile
-2025/07/06 10:49:32    GET /api/players/{address}/packs      - Get player's pack history
-2025/07/06 10:49:32    GET /api/players/{address}/stats      - Get player statistics
-2025/07/06 10:49:32    GET /api/nfts/{tokenId}               - Get NFT details and history
-2025/07/06 10:49:32    GET /api/packs/{packId}               - Get pack details with NFTs
-2025/07/06 10:49:32    GET /api/nfts?ids=1,2,3               - Get multiple NFTs by IDs
-2025/07/06 10:49:32    GET /api/packs/recent                 - Get recent pack purchases
-2025/07/06 10:49:32    GET /api/leaderboard/collectors       - Get top collectors
-2025/07/06 10:49:32    GET /api/stats/game                   - Get game statistics
-2025/07/06 10:49:32 Failed to start server:listen tcp :8081: bind: address already in use
-exit status 1
+2025/07/06 15:50:43 🚀 Nadmon Backend started on port 8081
+2025/07/06 15:50:43 📊 Health check: http://localhost:8081/health
+2025/07/06 15:50:43 🔌 WebSocket: ws://localhost:8081/api/ws/{address}
+2025/07/06 15:50:43 📋 API Documentation:
+2025/07/06 15:50:43    GET /api/players/{address}/nadmons    - Get player's NFTs
+2025/07/06 15:50:43    GET /api/players/{address}/profile    - Get player profile
+2025/07/06 15:50:43    GET /api/players/{address}/packs      - Get player's pack history
+2025/07/06 15:50:43    GET /api/players/{address}/stats      - Get player statistics
+2025/07/06 15:50:43    GET /api/nfts/{tokenId}               - Get NFT details and history
+2025/07/06 15:50:43    GET /api/packs/{packId}               - Get pack details with NFTs
+2025/07/06 15:50:43    GET /api/nfts?ids=1,2,3               - Get multiple NFTs by IDs
+2025/07/06 15:50:43    GET /api/packs/recent                 - Get recent pack purchases
+2025/07/06 15:50:43    GET /api/leaderboard/collectors       - Get top collectors
+2025/07/06 15:50:43    GET /api/stats/game                   - Get game statistics
+[GIN] 2025/07/06 - 15:50:51 | 200 |    3.506625ms |             ::1 | GET      "/health"
+[GIN] 2025/07/06 - 15:51:05 | 200 |    5.025417ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:51:36 | 200 |    3.345125ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:52:06 | 200 |   13.236541ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:52:36 | 200 |    6.115292ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:53:06 | 200 |    4.952834ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:53:18 | 200 |    5.923542ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:53:49 | 200 |    3.612125ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:54:01 | 204 |       7.792µs |             ::1 | OPTIONS  "/api/packs/266"
+[GIN] 2025/07/06 - 15:54:01 | 200 |    3.345625ms |             ::1 | GET      "/api/packs/266"
+[GIN] 2025/07/06 - 15:54:04 | 200 |    3.327667ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:54:18 | 200 |    4.501584ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:54:21 | 204 |        5.75µs |             ::1 | OPTIONS  "/api/packs/271"
+[GIN] 2025/07/06 - 15:54:21 | 200 |     3.41125ms |             ::1 | GET      "/api/packs/271"
+[GIN] 2025/07/06 - 15:54:24 | 200 |    3.201667ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:54:40 | 204 |       5.417µs |             ::1 | OPTIONS  "/api/packs/276"
+[GIN] 2025/07/06 - 15:54:40 | 200 |       3.105ms |             ::1 | GET      "/api/packs/276"
+[GIN] 2025/07/06 - 15:54:44 | 200 |    3.688917ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:54:48 | 200 |    3.982917ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:55:00 | 204 |        5.75µs |             ::1 | OPTIONS  "/api/packs/281"
+[GIN] 2025/07/06 - 15:55:00 | 200 |     2.81575ms |             ::1 | GET      "/api/packs/281"
+[GIN] 2025/07/06 - 15:55:03 | 200 |    3.208792ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:55:18 | 204 |       5.542µs |             ::1 | OPTIONS  "/api/packs/286"
+[GIN] 2025/07/06 - 15:55:18 | 200 |    3.254292ms |             ::1 | GET      "/api/packs/286"
+[GIN] 2025/07/06 - 15:55:18 | 200 |    4.196375ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:55:21 | 200 |    4.323875ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:55:37 | 204 |        5.75µs |             ::1 | OPTIONS  "/api/packs/291"
+[GIN] 2025/07/06 - 15:55:37 | 200 |    3.225375ms |             ::1 | GET      "/api/packs/291"
+[GIN] 2025/07/06 - 15:55:40 | 200 |       4.138ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:55:48 | 200 |   17.957875ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:56:19 | 200 |    4.571209ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:56:31 | 200 |    3.991084ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:56:34 | 200 |    5.401041ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:56:39 | 200 |    3.565083ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:56:47 | 200 |    3.929916ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:57:17 | 200 |    5.623792ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:57:47 | 200 |       4.049ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:58:17 | 200 |    6.373667ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:58:47 | 200 |    4.789375ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:59:17 | 200 |    6.584292ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:59:47 | 200 |    3.505166ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 15:59:48 | 200 |     4.79575ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 16:00:02 | 200 |    3.161625ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 16:00:33 | 200 |    4.572667ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 16:00:42 | 200 |    4.332375ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 16:01:13 | 200 |   15.944125ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 16:01:43 | 200 |    4.102083ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 16:02:12 | 200 |    3.689958ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 16:02:42 | 200 |    3.842541ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 16:03:12 | 200 |    3.650167ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 16:03:42 | 200 |    5.213417ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 16:04:12 | 200 |    3.529708ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 16:04:42 | 200 |    3.643583ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 16:05:12 | 200 |    4.566959ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 16:05:43 | 200 |    5.010833ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 16:06:14 | 200 |    36.30425ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 16:06:45 | 200 |    4.546625ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 16:06:51 | 200 |   15.207666ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 18:33:11 | 200 |   40.898459ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 18:33:42 | 200 |    4.112875ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 18:33:45 | 200 |    4.336208ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 18:33:50 | 200 |    3.887042ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 18:34:21 | 200 |    6.739958ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 18:35:28 | 200 |    5.119958ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 18:36:16 | 200 |    3.741542ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 18:36:19 | 200 |    4.061708ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 18:36:24 | 200 |    4.839166ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 18:36:39 | 200 |    5.257166ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:18:55 | 204 |      53.958µs |             ::1 | OPTIONS  "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:18:55 | 200 |    21.36325ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:19:11 | 200 |    5.189041ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:19:31 | 200 |    3.485667ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:19:34 | 200 |     3.45525ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:19:39 | 200 |    4.672708ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:19:52 | 200 |    7.196792ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:19:55 | 200 |    3.949125ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:20:00 | 200 |    4.001625ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:20:07 | 200 |     3.87575ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:20:10 | 200 |    3.666333ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:20:15 | 200 |    3.512083ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:24:09 | 200 |   12.113292ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:32:07 | 200 |   14.696167ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:32:14 | 204 |         4.5µs |             ::1 | OPTIONS  "/api/packs/311"
+[GIN] 2025/07/06 - 19:32:14 | 200 |    4.942625ms |             ::1 | GET      "/api/packs/311"
+[GIN] 2025/07/06 - 19:32:17 | 200 |    4.284709ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:33:13 | 204 |       4.667µs |             ::1 | OPTIONS  "/api/packs/316"
+[GIN] 2025/07/06 - 19:33:13 | 200 |    4.617541ms |             ::1 | GET      "/api/packs/316"
+[GIN] 2025/07/06 - 19:33:16 | 200 |     5.01925ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:33:48 | 204 |      79.959µs |             ::1 | OPTIONS  "/api/packs/321"
+[GIN] 2025/07/06 - 19:33:48 | 200 |    3.895083ms |             ::1 | GET      "/api/packs/321"
+[GIN] 2025/07/06 - 19:33:51 | 200 |    3.668375ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:35:14 | 204 |      13.541µs |             ::1 | OPTIONS  "/api/packs/326"
+[GIN] 2025/07/06 - 19:35:14 | 200 |    3.581667ms |             ::1 | GET      "/api/packs/326"
+[GIN] 2025/07/06 - 19:35:15 | 200 |    3.347334ms |             ::1 | GET      "/api/packs/326"
+[GIN] 2025/07/06 - 19:35:18 | 200 |    3.420125ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:35:18 | 200 |    3.768375ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:35:50 | 204 |       6.625µs |             ::1 | OPTIONS  "/api/packs/331"
+[GIN] 2025/07/06 - 19:35:50 | 200 |    5.175083ms |             ::1 | GET      "/api/packs/331"
+[GIN] 2025/07/06 - 19:35:53 | 200 |      3.9045ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:44:18 | 200 |      16.929ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:46:11 | 200 |    5.019791ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:50:06 | 200 |   16.569834ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:50:13 | 204 |      29.375µs |             ::1 | OPTIONS  "/api/packs/336"
+[GIN] 2025/07/06 - 19:50:13 | 200 |    3.815625ms |             ::1 | GET      "/api/packs/336"
+[GIN] 2025/07/06 - 19:50:16 | 200 |    4.381041ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 19:51:07 | 200 |    5.498375ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 21:19:57 | 200 |    27.07475ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 21:20:47 | 200 |    5.509583ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 21:20:50 | 200 |    4.356583ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 21:20:55 | 200 |    5.322541ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 21:21:05 | 200 |    4.080291ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 21:21:12 | 204 |       5.708µs |             ::1 | OPTIONS  "/api/packs/341"
+[GIN] 2025/07/06 - 21:21:12 | 200 |    6.099875ms |             ::1 | GET      "/api/packs/341"
+[GIN] 2025/07/06 - 21:21:15 | 200 |    6.115125ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 21:21:30 | 204 |       5.084µs |             ::1 | OPTIONS  "/api/packs/346"
+[GIN] 2025/07/06 - 21:21:30 | 404 |    1.465791ms |             ::1 | GET      "/api/packs/346"
+[GIN] 2025/07/06 - 21:21:31 | 404 |    2.454709ms |             ::1 | GET      "/api/packs/346"
+[GIN] 2025/07/06 - 21:21:33 | 200 |    4.756041ms |             ::1 | GET      "/api/packs/346"
+[GIN] 2025/07/06 - 21:21:36 | 200 |    4.051292ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 21:21:51 | 204 |      13.375µs |             ::1 | OPTIONS  "/api/packs/351"
+[GIN] 2025/07/06 - 21:21:51 | 404 |     2.32925ms |             ::1 | GET      "/api/packs/351"
+[GIN] 2025/07/06 - 21:21:52 | 200 |    4.798625ms |             ::1 | GET      "/api/packs/351"
+[GIN] 2025/07/06 - 21:21:55 | 200 |    5.441292ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 21:27:59 | 200 |   13.457375ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 21:30:17 | 200 |   10.224541ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 21:30:21 | 200 |       5.819ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 21:44:40 | 200 |   20.975834ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 21:52:08 | 200 |   24.057917ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 21:57:03 | 200 |    5.678125ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 21:57:24 | 200 |     16.4255ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 21:57:28 | 200 |    5.458625ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 21:57:30 | 200 |    4.909417ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 21:57:33 | 200 |    4.386625ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 22:06:07 | 200 |   20.682666ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 22:06:20 | 200 |    5.126334ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 22:06:30 | 200 |    5.122166ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 22:11:27 | 200 |   14.623416ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 22:11:36 | 200 |    4.091292ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 22:11:45 | 200 |    5.125041ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 22:12:05 | 200 |   22.638667ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 22:13:26 | 200 |     6.58675ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 22:14:10 | 200 |      4.9275ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 22:21:42 | 204 |       44.25µs |             ::1 | OPTIONS  "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 22:21:42 | 200 |   20.622917ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 22:21:49 | 200 |    4.179542ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 22:21:52 | 200 |     6.64625ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 22:23:16 | 200 |    5.673958ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 22:27:04 | 200 |   18.398583ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 22:27:14 | 200 |    4.960667ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 22:27:47 | 200 |    4.376834ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 22:27:59 | 200 |    5.610083ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 22:28:17 | 200 |    6.032834ms |             ::1 | GET      "/api/players/0x47B245f2A3c7557d855E4d800890C4a524a42Cc8/nadmons"
+[GIN] 2025/07/06 - 22:53:11 | 204 |      27.667µs |             ::1 | OPTIONS  "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/06 - 22:53:11 | 500 |       1.844ms |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/06 - 22:53:12 | 500 |         770µs |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/06 - 22:53:14 | 500 |     906.125µs |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/06 - 22:54:21 | 500 |         769µs |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/06 - 22:54:22 | 500 |     654.666µs |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/06 - 22:54:24 | 500 |     589.792µs |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/06 - 23:03:45 | 500 |    1.205875ms |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/06 - 23:03:46 | 500 |     775.292µs |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/06 - 23:03:48 | 500 |     626.625µs |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/07 - 00:04:44 | 500 |    1.316958ms |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/07 - 00:04:45 | 500 |    1.821959ms |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/07 - 00:04:48 | 500 |     672.083µs |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/07 - 00:04:51 | 500 |     811.583µs |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/07 - 00:04:52 | 500 |     613.833µs |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/07 - 00:04:55 | 500 |     704.917µs |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/07 - 00:05:02 | 500 |     594.709µs |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/07 - 00:05:03 | 500 |     700.458µs |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/07 - 00:05:06 | 500 |     678.334µs |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/07 - 00:05:13 | 500 |    1.143417ms |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/07 - 00:05:14 | 500 |     720.209µs |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/07 - 00:05:17 | 500 |     701.458µs |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/07 - 00:05:23 | 500 |     597.708µs |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/07 - 00:05:25 | 500 |     646.416µs |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/07 - 00:05:28 | 500 |     764.167µs |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/07 - 00:23:37 | 204 |      71.666µs |             ::1 | OPTIONS  "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/07 - 00:23:37 | 500 |     870.625µs |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/07 - 00:23:38 | 500 |     662.959µs |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+[GIN] 2025/07/07 - 00:23:40 | 500 |     883.541µs |             ::1 | GET      "/api/players/0x200c32D5D44e4EfbD49743B4205c25Faa24049Fb/nadmons"
+2025/07/07 00:24:23 🛑 Shutting down server...
+2025/07/07 00:24:23 ✅ Server exited

@@ -26,21 +26,41 @@ func NewNadmonRepository(db *database.EnvioDB) *NadmonRepository {
 // GetPlayerNadmons retrieves all NFTs owned by a player with their current stats
 func (r *NadmonRepository) GetPlayerNadmons(address string) ([]models.Nadmon, error) {
 	query := `
-		SELECT DISTINCT ON (m."tokenId")
-			m."tokenId", m.owner, m."packId", m."nadmonType", 
+		WITH current_owners AS (
+			-- Get the most recent Transfer event for each token to determine current owner
+			SELECT DISTINCT ON (t."tokenId") 
+				t."tokenId", 
+				t."to" as current_owner
+			FROM "NadmonNFT_Transfer" t
+			ORDER BY t."tokenId", t.db_write_timestamp DESC
+		),
+		latest_stats AS (
+			-- Get the most recent stats for each token
+			SELECT DISTINCT ON (s."tokenId")
+				s."tokenId", s."newHp", s."newAttack", s."newDefense", 
+				s."newCrit", s."newFusion", s."newEvo", s.db_write_timestamp
+			FROM "NadmonNFT_StatsChanged" s
+			ORDER BY s."tokenId", s.sequence DESC
+		)
+		SELECT 
+			m."tokenId", 
+			COALESCE(co.current_owner, m.owner) as owner, 
+			m."packId", m."nadmonType", 
 			m.element, m.rarity,
-			COALESCE(s."newHp", m.hp) as hp,
-			COALESCE(s."newAttack", m.attack) as attack,
-			COALESCE(s."newDefense", m.defense) as defense,
-			COALESCE(s."newCrit", m.crit) as crit,
-			COALESCE(s."newFusion", m.fusion) as fusion,
-			COALESCE(s."newEvo", m.evo) as evo,
+			COALESCE(ls."newHp", m.hp) as hp,
+			COALESCE(ls."newAttack", m.attack) as attack,
+			COALESCE(ls."newDefense", m.defense) as defense,
+			COALESCE(ls."newCrit", m.crit) as crit,
+			COALESCE(ls."newFusion", m.fusion) as fusion,
+			COALESCE(ls."newEvo", m.evo) as evo,
 			m.db_write_timestamp as created_at,
-			COALESCE(s.db_write_timestamp, m.db_write_timestamp) as last_updated
+			COALESCE(ls.db_write_timestamp, m.db_write_timestamp) as last_updated
 		FROM "NadmonNFT_NadmonMinted" m
-		LEFT JOIN "NadmonNFT_StatsChanged" s ON m."tokenId" = s."tokenId"
-		WHERE m.owner = $1
-		ORDER BY m."tokenId", s.sequence DESC NULLS LAST
+		LEFT JOIN current_owners co ON m."tokenId" = co."tokenId"
+		LEFT JOIN latest_stats ls ON m."tokenId" = ls."tokenId"
+		WHERE COALESCE(co.current_owner, m.owner) = $1 
+			AND COALESCE(co.current_owner, m.owner) != '0x0000000000000000000000000000000000000000'
+		ORDER BY m."tokenId"
 	`
 
 	rows, err := r.db.DB.Query(query, address)
@@ -90,7 +110,14 @@ func (r *NadmonRepository) GetPlayerProfile(address string) (*models.PlayerProfi
 			UNION ALL
 			SELECT s.db_write_timestamp FROM "NadmonNFT_StatsChanged" s
 			JOIN "NadmonNFT_NadmonMinted" m ON s."tokenId" = m."tokenId"
-			WHERE m.owner = $1
+			LEFT JOIN (
+				SELECT DISTINCT ON (t."tokenId") 
+					t."tokenId", t."to" as current_owner
+				FROM "NadmonNFT_Transfer" t
+				ORDER BY t."tokenId", t.db_write_timestamp DESC
+			) co ON m."tokenId" = co."tokenId"
+			WHERE COALESCE(co.current_owner, m.owner) = $1
+				AND COALESCE(co.current_owner, m.owner) != '0x0000000000000000000000000000000000000000'
 		) combined
 	`, address).Scan(&lastActive)
 	if err != nil {
@@ -194,21 +221,41 @@ func (r *NadmonRepository) GetNadmonsByIDs(tokenIDs []int64) ([]models.Nadmon, e
 	}
 
 	query := fmt.Sprintf(`
+		WITH current_owners AS (
+			-- Get the most recent Transfer event for each token to determine current owner
+			SELECT DISTINCT ON (t."tokenId") 
+				t."tokenId", 
+				t."to" as current_owner
+			FROM "NadmonNFT_Transfer" t
+			ORDER BY t."tokenId", t.db_write_timestamp DESC
+		),
+		latest_stats AS (
+			-- Get the most recent stats for each token
+			SELECT DISTINCT ON (s."tokenId")
+				s."tokenId", s."newHp", s."newAttack", s."newDefense", 
+				s."newCrit", s."newFusion", s."newEvo", s.db_write_timestamp
+			FROM "NadmonNFT_StatsChanged" s
+			ORDER BY s."tokenId", s.sequence DESC
+		)
 		SELECT DISTINCT ON (m."tokenId")
-			m."tokenId", m.owner, m."packId", m."nadmonType", 
+			m."tokenId", 
+			COALESCE(co.current_owner, m.owner) as owner, 
+			m."packId", m."nadmonType", 
 			m.element, m.rarity,
-			COALESCE(s."newHp", m.hp) as hp,
-			COALESCE(s."newAttack", m.attack) as attack,
-			COALESCE(s."newDefense", m.defense) as defense,
-			COALESCE(s."newCrit", m.crit) as crit,
-			COALESCE(s."newFusion", m.fusion) as fusion,
-			COALESCE(s."newEvo", m.evo) as evo,
+			COALESCE(ls."newHp", m.hp) as hp,
+			COALESCE(ls."newAttack", m.attack) as attack,
+			COALESCE(ls."newDefense", m.defense) as defense,
+			COALESCE(ls."newCrit", m.crit) as crit,
+			COALESCE(ls."newFusion", m.fusion) as fusion,
+			COALESCE(ls."newEvo", m.evo) as evo,
 			m.db_write_timestamp as created_at,
-			COALESCE(s.db_write_timestamp, m.db_write_timestamp) as last_updated
+			COALESCE(ls.db_write_timestamp, m.db_write_timestamp) as last_updated
 		FROM "NadmonNFT_NadmonMinted" m
-		LEFT JOIN "NadmonNFT_StatsChanged" s ON m."tokenId" = s."tokenId"
+		LEFT JOIN current_owners co ON m."tokenId" = co."tokenId"
+		LEFT JOIN latest_stats ls ON m."tokenId" = ls."tokenId"
 		WHERE m."tokenId" IN (%s)
-		ORDER BY m."tokenId", s.sequence DESC NULLS LAST
+			AND COALESCE(co.current_owner, m.owner) != '0x0000000000000000000000000000000000000000'
+		ORDER BY m."tokenId"
 	`, strings.Join(placeholders, ","))
 
 	rows, err := r.db.DB.Query(query, args...)
@@ -238,21 +285,41 @@ func (r *NadmonRepository) GetNadmonsByIDs(tokenIDs []int64) ([]models.Nadmon, e
 // GetSingleNadmon retrieves a single NFT by token ID with current stats
 func (r *NadmonRepository) GetSingleNadmon(tokenID int64) (*models.Nadmon, error) {
 	query := `
+		WITH current_owners AS (
+			-- Get the most recent Transfer event for each token to determine current owner
+			SELECT DISTINCT ON (t."tokenId") 
+				t."tokenId", 
+				t."to" as current_owner
+			FROM "NadmonNFT_Transfer" t
+			ORDER BY t."tokenId", t.db_write_timestamp DESC
+		),
+		latest_stats AS (
+			-- Get the most recent stats for each token
+			SELECT DISTINCT ON (s."tokenId")
+				s."tokenId", s."newHp", s."newAttack", s."newDefense", 
+				s."newCrit", s."newFusion", s."newEvo", s.db_write_timestamp
+			FROM "NadmonNFT_StatsChanged" s
+			ORDER BY s."tokenId", s.sequence DESC
+		)
 		SELECT DISTINCT ON (m."tokenId")
-			m."tokenId", m.owner, m."packId", m."nadmonType", 
+			m."tokenId", 
+			COALESCE(co.current_owner, m.owner) as owner, 
+			m."packId", m."nadmonType", 
 			m.element, m.rarity,
-			COALESCE(s."newHp", m.hp) as hp,
-			COALESCE(s."newAttack", m.attack) as attack,
-			COALESCE(s."newDefense", m.defense) as defense,
-			COALESCE(s."newCrit", m.crit) as crit,
-			COALESCE(s."newFusion", m.fusion) as fusion,
-			COALESCE(s."newEvo", m.evo) as evo,
+			COALESCE(ls."newHp", m.hp) as hp,
+			COALESCE(ls."newAttack", m.attack) as attack,
+			COALESCE(ls."newDefense", m.defense) as defense,
+			COALESCE(ls."newCrit", m.crit) as crit,
+			COALESCE(ls."newFusion", m.fusion) as fusion,
+			COALESCE(ls."newEvo", m.evo) as evo,
 			m.db_write_timestamp as created_at,
-			COALESCE(s.db_write_timestamp, m.db_write_timestamp) as last_updated
+			COALESCE(ls.db_write_timestamp, m.db_write_timestamp) as last_updated
 		FROM "NadmonNFT_NadmonMinted" m
-		LEFT JOIN "NadmonNFT_StatsChanged" s ON m."tokenId" = s."tokenId"
+		LEFT JOIN current_owners co ON m."tokenId" = co."tokenId"
+		LEFT JOIN latest_stats ls ON m."tokenId" = ls."tokenId"
 		WHERE m."tokenId" = $1
-		ORDER BY m."tokenId", s.sequence DESC NULLS LAST
+			AND COALESCE(co.current_owner, m.owner) != '0x0000000000000000000000000000000000000000'
+		ORDER BY m."tokenId"
 	`
 
 	var nadmon models.Nadmon
@@ -352,9 +419,20 @@ func (r *NadmonRepository) GetRecentPacks(limit int) ([]models.Pack, error) {
 // GetTopCollectors retrieves players with the most NFTs
 func (r *NadmonRepository) GetTopCollectors(limit int) ([]models.PlayerProfile, error) {
 	query := `
-		SELECT owner, COUNT(*) as nft_count
-		FROM "NadmonNFT_NadmonMinted"
-		GROUP BY owner
+		WITH current_owners AS (
+			SELECT DISTINCT ON (t."tokenId") 
+				t."tokenId", 
+				t."to" as current_owner
+			FROM "NadmonNFT_Transfer" t
+			ORDER BY t."tokenId", t.db_write_timestamp DESC
+		)
+		SELECT 
+			COALESCE(co.current_owner, m.owner) as owner, 
+			COUNT(*) as nft_count
+		FROM "NadmonNFT_NadmonMinted" m
+		LEFT JOIN current_owners co ON m."tokenId" = co."tokenId"
+		WHERE COALESCE(co.current_owner, m.owner) != '0x0000000000000000000000000000000000000000'
+		GROUP BY COALESCE(co.current_owner, m.owner)
 		ORDER BY nft_count DESC
 		LIMIT $1
 	`
@@ -381,20 +459,38 @@ func (r *NadmonRepository) GetTopCollectors(limit int) ([]models.PlayerProfile, 
 // SearchNadmons searches for NFTs by various criteria
 func (r *NadmonRepository) SearchNadmons(address string, filters map[string]interface{}) ([]models.Nadmon, error) {
 	baseQuery := `
-		SELECT DISTINCT ON (m."tokenId")
-			m."tokenId", m.owner, m."packId", m."nadmonType", 
+		WITH current_owners AS (
+			SELECT DISTINCT ON (t."tokenId") 
+				t."tokenId", 
+				t."to" as current_owner
+			FROM "NadmonNFT_Transfer" t
+			ORDER BY t."tokenId", t.db_write_timestamp DESC
+		),
+		latest_stats AS (
+			SELECT DISTINCT ON (s."tokenId")
+				s."tokenId", s."newHp", s."newAttack", s."newDefense", 
+				s."newCrit", s."newFusion", s."newEvo", s.db_write_timestamp
+			FROM "NadmonNFT_StatsChanged" s
+			ORDER BY s."tokenId", s.sequence DESC
+		)
+		SELECT 
+			m."tokenId", 
+			COALESCE(co.current_owner, m.owner) as owner, 
+			m."packId", m."nadmonType", 
 			m.element, m.rarity,
-			COALESCE(s."newHp", m.hp) as hp,
-			COALESCE(s."newAttack", m.attack) as attack,
-			COALESCE(s."newDefense", m.defense) as defense,
-			COALESCE(s."newCrit", m.crit) as crit,
-			COALESCE(s."newFusion", m.fusion) as fusion,
-			COALESCE(s."newEvo", m.evo) as evo,
+			COALESCE(ls."newHp", m.hp) as hp,
+			COALESCE(ls."newAttack", m.attack) as attack,
+			COALESCE(ls."newDefense", m.defense) as defense,
+			COALESCE(ls."newCrit", m.crit) as crit,
+			COALESCE(ls."newFusion", m.fusion) as fusion,
+			COALESCE(ls."newEvo", m.evo) as evo,
 			m.db_write_timestamp as created_at,
-			COALESCE(s.db_write_timestamp, m.db_write_timestamp) as last_updated
+			COALESCE(ls.db_write_timestamp, m.db_write_timestamp) as last_updated
 		FROM "NadmonNFT_NadmonMinted" m
-		LEFT JOIN "NadmonNFT_StatsChanged" s ON m."tokenId" = s."tokenId"
-		WHERE m.owner = $1
+		LEFT JOIN current_owners co ON m."tokenId" = co."tokenId"
+		LEFT JOIN latest_stats ls ON m."tokenId" = ls."tokenId"
+		WHERE COALESCE(co.current_owner, m.owner) = $1 
+			AND COALESCE(co.current_owner, m.owner) != '0x0000000000000000000000000000000000000000'
 	`
 
 	var conditions []string
@@ -462,8 +558,20 @@ func (r *NadmonRepository) SearchNadmons(address string, filters map[string]inte
 func (r *NadmonRepository) GetGameStats() (*models.GameStats, error) {
 	stats := &models.GameStats{}
 
-	// Total NFTs
-	err := r.db.DB.QueryRow(`SELECT COUNT(*) FROM "NadmonNFT_NadmonMinted"`).Scan(&stats.TotalNFTs)
+	// Total NFTs (excluding burned ones)
+	err := r.db.DB.QueryRow(`
+		WITH current_owners AS (
+			SELECT DISTINCT ON (t."tokenId") 
+				t."tokenId", 
+				t."to" as current_owner
+			FROM "NadmonNFT_Transfer" t
+			ORDER BY t."tokenId", t.db_write_timestamp DESC
+		)
+		SELECT COUNT(*) 
+		FROM "NadmonNFT_NadmonMinted" m
+		LEFT JOIN current_owners co ON m."tokenId" = co."tokenId"
+		WHERE COALESCE(co.current_owner, m.owner) != '0x0000000000000000000000000000000000000000'
+	`).Scan(&stats.TotalNFTs)
 	if err != nil {
 		return nil, fmt.Errorf("failed to count NFTs: %w", err)
 	}
@@ -474,8 +582,20 @@ func (r *NadmonRepository) GetGameStats() (*models.GameStats, error) {
 		return nil, fmt.Errorf("failed to count packs: %w", err)
 	}
 
-	// Unique collectors
-	err = r.db.DB.QueryRow(`SELECT COUNT(DISTINCT owner) FROM "NadmonNFT_NadmonMinted"`).Scan(&stats.UniqueCollectors)
+	// Unique collectors (excluding those who only have burned NFTs)
+	err = r.db.DB.QueryRow(`
+		WITH current_owners AS (
+			SELECT DISTINCT ON (t."tokenId") 
+				t."tokenId", 
+				t."to" as current_owner
+			FROM "NadmonNFT_Transfer" t
+			ORDER BY t."tokenId", t.db_write_timestamp DESC
+		)
+		SELECT COUNT(DISTINCT COALESCE(co.current_owner, m.owner)) 
+		FROM "NadmonNFT_NadmonMinted" m
+		LEFT JOIN current_owners co ON m."tokenId" = co."tokenId"
+		WHERE COALESCE(co.current_owner, m.owner) != '0x0000000000000000000000000000000000000000'
+	`).Scan(&stats.UniqueCollectors)
 	if err != nil {
 		return nil, fmt.Errorf("failed to count collectors: %w", err)
 	}
