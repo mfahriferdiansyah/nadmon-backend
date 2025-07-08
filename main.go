@@ -58,7 +58,11 @@ func main() {
 
 	// CORS middleware
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000", "http://localhost:3001", "http://localhost:3002", "http://localhost:3003"},
+		AllowOrigins: []string{
+			"http://localhost:3000",
+			"https://nadmon.kadzu.dev",
+			"https://be-nadmon.kadzu.dev",
+		},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
@@ -104,8 +108,8 @@ func main() {
 		// NFT endpoints
 		api.GET("/nfts/:tokenId", nadmonHandler.GetNFT)
 		api.GET("/nfts/:tokenId/history", nadmonHandler.GetNFT) // Same endpoint, returns history
-		api.GET("/nfts", nadmonHandler.GetNFTsByIDs) // Batch fetch NFTs by IDs
-		
+		api.GET("/nfts", nadmonHandler.GetNFTsByIDs)            // Batch fetch NFTs by IDs
+
 		// Pack endpoints
 		api.GET("/packs/:packId", nadmonHandler.GetPackDetails)
 

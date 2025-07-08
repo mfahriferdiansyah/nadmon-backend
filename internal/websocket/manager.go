@@ -19,11 +19,11 @@ type Message struct {
 
 // Client represents a WebSocket client
 type Client struct {
-	ID       string
-	Address  string // Ethereum address
-	Conn     *websocket.Conn
-	Send     chan Message
-	Manager  *Manager
+	ID      string
+	Address string // Ethereum address
+	Conn    *websocket.Conn
+	Send    chan Message
+	Manager *Manager
 }
 
 // Manager manages WebSocket connections
@@ -40,9 +40,19 @@ var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
-		// Allow connections from any origin in development
-		// In production, you should validate the origin
-		return true
+		origin := r.Header.Get("Origin")
+		allowedOrigins := []string{
+			"http://localhost:3000",
+			"https://nadmon.kadzu.dev",
+			"https://be-nadmon.kadzu.dev",
+		}
+
+		for _, allowed := range allowedOrigins {
+			if origin == allowed {
+				return true
+			}
+		}
+		return false
 	},
 }
 
@@ -59,15 +69,15 @@ func NewManager() *Manager {
 // Start starts the WebSocket manager
 func (m *Manager) Start() {
 	log.Println("🔌 WebSocket manager started")
-	
+
 	for {
 		select {
 		case client := <-m.register:
 			m.registerClient(client)
-			
+
 		case client := <-m.unregister:
 			m.unregisterClient(client)
-			
+
 		case message := <-m.broadcast:
 			m.broadcastMessage(message)
 		}
@@ -78,23 +88,23 @@ func (m *Manager) Start() {
 func (m *Manager) registerClient(client *Client) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	
+
 	// If there's already a client for this address, close the old connection
 	if existingClient, exists := m.clients[client.Address]; exists {
 		close(existingClient.Send)
 		existingClient.Conn.Close()
 	}
-	
+
 	m.clients[client.Address] = client
 	log.Printf("✅ Client connected: %s (Total: %d)", client.Address, len(m.clients))
-	
+
 	// Send welcome message
 	welcomeMsg := Message{
 		Type:      "connected",
 		Data:      map[string]string{"address": client.Address, "status": "connected"},
 		Timestamp: time.Now(),
 	}
-	
+
 	select {
 	case client.Send <- welcomeMsg:
 	default:
@@ -107,7 +117,7 @@ func (m *Manager) registerClient(client *Client) {
 func (m *Manager) unregisterClient(client *Client) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	
+
 	if _, exists := m.clients[client.Address]; exists {
 		delete(m.clients, client.Address)
 		close(client.Send)
@@ -120,7 +130,7 @@ func (m *Manager) unregisterClient(client *Client) {
 func (m *Manager) broadcastMessage(message Message) {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
-	
+
 	for address, client := range m.clients {
 		select {
 		case client.Send <- message:
@@ -136,17 +146,17 @@ func (m *Manager) NotifyUser(address string, messageType string, data interface{
 	m.mu.RLock()
 	client, exists := m.clients[address]
 	m.mu.RUnlock()
-	
+
 	if !exists {
 		return // User not connected
 	}
-	
+
 	message := Message{
 		Type:      messageType,
 		Data:      data,
 		Timestamp: time.Now(),
 	}
-	
+
 	select {
 	case client.Send <- message:
 		log.Printf("📤 Sent %s to %s", messageType, address)
@@ -163,7 +173,7 @@ func (m *Manager) BroadcastToAll(messageType string, data interface{}) {
 		Data:      data,
 		Timestamp: time.Now(),
 	}
-	
+
 	m.broadcast <- message
 }
 
@@ -171,7 +181,7 @@ func (m *Manager) BroadcastToAll(messageType string, data interface{}) {
 func (m *Manager) GetConnectedUsers() []string {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
-	
+
 	users := make([]string, 0, len(m.clients))
 	for address := range m.clients {
 		users = append(users, address)
@@ -183,7 +193,7 @@ func (m *Manager) GetConnectedUsers() []string {
 func (m *Manager) GetStats() map[string]interface{} {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
-	
+
 	return map[string]interface{}{
 		"connected_clients": len(m.clients),
 		"connected_users":   m.GetConnectedUsers(),
