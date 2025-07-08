@@ -28,41 +28,40 @@ type Client struct {
 
 // Manager manages WebSocket connections
 type Manager struct {
-	clients    map[string]*Client // Map of address -> client
-	register   chan *Client
-	unregister chan *Client
-	broadcast  chan Message
-	mu         sync.RWMutex
+	clients        map[string]*Client // Map of address -> client
+	register       chan *Client
+	unregister     chan *Client
+	broadcast      chan Message
+	allowedOrigins []string
+	mu             sync.RWMutex
 }
 
-// WebSocket upgrader with CORS support
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-	CheckOrigin: func(r *http.Request) bool {
-		origin := r.Header.Get("Origin")
-		allowedOrigins := []string{
-			"http://localhost:3000",
-			"https://nadmon.kadzu.dev",
-			"https://be-nadmon.kadzu.dev",
-		}
-
-		for _, allowed := range allowedOrigins {
-			if origin == allowed {
-				return true
+// getWebSocketUpgrader creates a WebSocket upgrader with dynamic CORS support
+func (m *Manager) getWebSocketUpgrader() websocket.Upgrader {
+	return websocket.Upgrader{
+		ReadBufferSize:  1024,
+		WriteBufferSize: 1024,
+		CheckOrigin: func(r *http.Request) bool {
+			origin := r.Header.Get("Origin")
+			
+			for _, allowed := range m.allowedOrigins {
+				if origin == allowed {
+					return true
+				}
 			}
-		}
-		return false
-	},
+			return false
+		},
+	}
 }
 
 // NewManager creates a new WebSocket manager
-func NewManager() *Manager {
+func NewManager(allowedOrigins []string) *Manager {
 	return &Manager{
-		clients:    make(map[string]*Client),
-		register:   make(chan *Client),
-		unregister: make(chan *Client),
-		broadcast:  make(chan Message),
+		clients:        make(map[string]*Client),
+		register:       make(chan *Client),
+		unregister:     make(chan *Client),
+		broadcast:      make(chan Message),
+		allowedOrigins: allowedOrigins,
 	}
 }
 
@@ -202,6 +201,7 @@ func (m *Manager) GetStats() map[string]interface{} {
 
 // UpgradeConnection upgrades HTTP connection to WebSocket
 func (m *Manager) UpgradeConnection(w http.ResponseWriter, r *http.Request, address string) {
+	upgrader := m.getWebSocketUpgrader()
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Printf("❌ WebSocket upgrade failed: %v", err)

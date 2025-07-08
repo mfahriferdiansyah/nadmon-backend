@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -46,23 +47,32 @@ func main() {
 		log.Printf("Warning: Failed to create some indexes: %v", err)
 	}
 
-	// Initialize WebSocket manager for real-time updates
-	wsManager := websocket.NewManager()
-	go wsManager.Start()
-
 	// Initialize repository layer
 	nadmonRepo := repository.NewNadmonRepository(envioDB)
 
+	// CORS middleware - get allowed origins from environment
+	corsOrigins := os.Getenv("CORS_ALLOWED_ORIGINS")
+	if corsOrigins == "" {
+		corsOrigins = "http://localhost:3000" // fallback for development
+	}
+	allowedOrigins := strings.Split(corsOrigins, ",")
+	
+	// Trim whitespace from each origin
+	for i, origin := range allowedOrigins {
+		allowedOrigins[i] = strings.TrimSpace(origin)
+	}
+	
+	log.Printf("🌐 CORS allowed origins: %v", allowedOrigins)
+
+	// Initialize WebSocket manager for real-time updates with CORS support
+	wsManager := websocket.NewManager(allowedOrigins)
+	go wsManager.Start()
+
 	// Initialize Gin router
 	r := gin.Default()
-
-	// CORS middleware
+	
 	r.Use(cors.New(cors.Config{
-		AllowOrigins: []string{
-			"http://localhost:3000",
-			"https://nadmon.kadzu.dev",
-			"https://be-nadmon.kadzu.dev",
-		},
+		AllowOrigins:     allowedOrigins,
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
